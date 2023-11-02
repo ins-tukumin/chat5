@@ -134,12 +134,16 @@ if "generated" not in st.session_state:
 if "past" not in st.session_state:
     st.session_state.past = []
 
+# 会話のターン数をカウント
+if 'count' not in st.session_state:
+    st.session_state.count = 0
+
 # 送信ボタンがクリックされた後の処理を行う関数を定義
 def on_input_change():
     # 会話のターン数をカウント
     #if 'count' not in st.session_state:
     #    st.session_state.count = 0
-    #st.session_state.count += 1
+    st.session_state.count += 1
     # n往復目にプロンプトテンプレートの一部を改めて入力
     #if  st.session_state.count == 3:
     #    api_user_message = st.session_state.user_message + "。そして、これ以降の会話では以前の語尾を廃止して、語尾をにゃんに変えてください"
@@ -194,7 +198,10 @@ with chat_placeholder.container():
 
 # 質問入力欄と送信ボタンを設置
 with st.container():
-    user_message = st.text_input("内容を入力して送信ボタンを押してください", key="user_message")
+    if  st.session_state.count == 0:
+        user_message = st.text_input("「原子力発電は廃止すべき」という意見に対して、あなたの意見を入力して送信ボタンを押してください", key="user_message")
+    else:
+        user_message = st.text_input("あなたの意見を入力して送信ボタンを押してください", key="user_message")
     st.button("送信", on_click=on_input_change)
 # 質問入力欄 上とどっちが良いか    
 #if user_message := st.chat_input("聞きたいことを入力してね！", key="user_message"):
